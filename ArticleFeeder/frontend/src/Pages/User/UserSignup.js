@@ -125,7 +125,12 @@ function UserSignup() {
           },
         });
         console.log('Request was successful:', response);
-        history.push('/');
+        const authData = {
+          userId: response.data.id,
+        };
+        const authDataString = JSON.stringify(authData);
+        localStorage.setItem('auth-token', authDataString);
+        history.push('/articlepreference');
       } catch (error) {
         console.log('Error:', error);
         console.log('Response Data:', error.response.data);

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {useHistory, Link} from 'react-router-dom';
 import axios from 'axios';
+import jwt from 'jsonwebtoken';
 
 function UserLogin() {
   const [password, setPassword] = useState("");
@@ -43,8 +44,17 @@ function UserLogin() {
           password: password,
         });
         const token = response.data.access;
+        const decodedToken = jwt.decode(token);
+
+        const userId = decodedToken.user_id;
+        const userEmail = decodedToken.email;
         console.log('Request was successful:', response);
-        localStorage.setItem('auth-token', token);
+        const authData = {
+          token: token,
+          userId: userId,
+        };
+        const authDataString = JSON.stringify(authData);
+        localStorage.setItem('auth-token', authDataString);
         history.push('/');
       } catch (error) {
         console.log('Error:', error);
